@@ -1,13 +1,43 @@
 const gameBoard = (function() {
-    //create array for game grid
-    //method for accepting coord and symbol of player then placing it
-})
+    let gameArray = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ]
+    function placeMarker(player) {
+        let row = --player.row
+        let col = --player.col
+        gameArray[row][col] = player.marker
+        console.log(gameArray)
+    }
+    return {gameArray, placeMarker}
+})();
 
-//factory func for making players
-//players can input coords of the box for placing symbol
 
-//use factory fumc to make player1 and player2
-//each player has own symbol (capital X or capital O)
+function createPlayer(number, marker) {
+    let row;
+    let col;
+    function selectPlacement(selectedRow, selectedCol) {
+        this.row = Number(selectedRow)
+        this.col = Number(selectedCol)
+    }
+    return {number, marker, row, col, selectPlacement}
+}
+
+
+//GLOBAL CODE BELOW
+let player1 = createPlayer(1, "O")
+let player2 = createPlayer(2, "X")
+
+
+
+
+
+
+
+
+
+
 
 //iife for gameManager
 //gameManager toggles boolean of players to determine turns
