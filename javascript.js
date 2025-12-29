@@ -1,4 +1,6 @@
 const game =  (function() {
+
+
     const gameBoard = (function() {
         let gameArray = [
             ['', '', ''],
@@ -14,7 +16,6 @@ const game =  (function() {
         return {gameArray, placeMarker}
     })();
 
-
     const gameManager = (function() {
         //true: player1's turn ; false: player2's turn
         let isPlayer1Turn;
@@ -25,12 +26,18 @@ const game =  (function() {
             function selectPlacement(selectedRow, selectedCol) {
                 this.row = Number(selectedRow)
                 this.col = Number(selectedCol)
+                gameBoard.placeMarker(this)
             }
             return {number, marker, row, col, selectPlacement}
         }
 
+        function determineWinner() {
+
+        }
+
         let player1 = createPlayer(1, "O")
         let player2 = createPlayer(2, "X")
+
         function checkGameState() {
             let result = determineWinner()
         }
