@@ -183,7 +183,7 @@ const game =  (function() {
         let player1 = createPlayer(1, "O")
         let player2 = createPlayer(2, "X")
 
-        return {isPlayer1Turn, player1, player2}
+        return {player1, player2}
     })();
     return {gameManager, playerManager}
 })();
