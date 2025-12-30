@@ -211,7 +211,11 @@ const game =  (function() {
                 return marker
             }
 
-            return {getPlayerNumber, getPlayerMarker, selectPlacement}
+            function getPlayerTurn() {
+                return isPlayer1Turn
+            }
+
+            return {getPlayerNumber, getPlayerMarker, getPlayerTurn, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
@@ -219,5 +223,31 @@ const game =  (function() {
 
         return {player1, player2}
     })();
-    return {gameManager, playerManager}
+
+
+
+    const displayManager = (function() {
+        let grid = document.querySelector('.board')
+        let row1 = document.querySelectorAll('.row1')
+        let row2 = document.querySelectorAll('.row2')
+        let row3 = document.querySelectorAll('.row3')
+        let gridArray = [Array.from(row1), Array.from(row2), Array.from(row3)]
+        let targetRow;
+        let targetCol;
+
+        grid.addEventListener('click', (event) => {
+            let buttonRow = event.target.classList[1]
+            let buttonCol = event.target.classList[2]
+            targetRow = buttonRow.slice(-1)
+            targetCol = buttonCol.slice(-1)
+            updateGrid()
+        })
+
+        function updateGrid() {
+            
+        }
+    
+        return {gridArray}
+    })();
+    return {gameManager, playerManager, displayManager}
 })();
