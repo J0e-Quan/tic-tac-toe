@@ -11,7 +11,7 @@ const game =  (function() {
             let col = --player.col
             gameArray[row][col] = player.marker
             console.log(gameArray)   
-            gameState = checkGameState(player.marker)
+            checkGameState(player.marker)
         }
 
         function checkPlayer1Markers(marker) {
@@ -147,9 +147,12 @@ const game =  (function() {
                 }
             }
             console.log("gameState should be: "+gameState)
-            return gameState
         }   
-        return {placeMarker, checkGameState, gameState}
+
+        function getGameState() {
+            return gameState
+        }
+        return {placeMarker, checkGameState, getGameState}
     })();
 
 
@@ -162,13 +165,14 @@ const game =  (function() {
             let row;
             let col;
             function selectPlacement(selectedRow, selectedCol) {
+                let gameState = gameManager.getGameState()
+                console.log('gameState: '+gameState)
                 if ((this.number === 1 && isPlayer1Turn === true) || (this.number ===2 && isPlayer1Turn === false)) {
-                    if (gameManager.gameState === '') {
+                    if (gameState === '') {
                         this.row = Number(selectedRow)
                         this.col = Number(selectedCol)
                         gameManager.placeMarker(this)     
-                        isPlayer1Turn = !isPlayer1Turn 
-                        console.log("gameState: "+gameManager.gameState)              
+                        isPlayer1Turn = !isPlayer1Turn              
                     } else {
                         console.log('game ended already stop playing...')
                     }
