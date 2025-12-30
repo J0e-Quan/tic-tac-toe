@@ -75,6 +75,19 @@ body {
     filter: brightness(0.25);
 }
 
+.player-icon-container {
+    position: relative;
+}
+
+.player.marker {
+    display: inline-block;
+    position: absolute;
+    right: 0rem;
+    top: 2.5rem;
+    font-size: 5rem;
+    text-align: center;
+}
+
 .player.highlight {
     width: 17.5rem;
     height: auto;
