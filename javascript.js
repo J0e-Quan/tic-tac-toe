@@ -6,12 +6,19 @@ const game =  (function() {
             ['', '', ''],
             ['', '', '']
         ]
+
         function placeMarker(player) {
             let row = --player.row
             let col = --player.col
             gameArray[row][col] = player.marker
             console.log(gameArray)   
             checkGameState(player.marker)
+        }
+
+        function getArrayElement(row, col) {
+            targetRow = --row
+            targetCol = --col
+            return gameArray[targetRow][targetCol]
         }
 
         function checkPlayer1Markers(marker) {
@@ -152,7 +159,7 @@ const game =  (function() {
         function getGameState() {
             return gameState
         }
-        return {placeMarker, checkGameState, getGameState}
+        return {placeMarker, checkGameState, getGameState, getArrayElement}
     })();
 
 
@@ -166,20 +173,35 @@ const game =  (function() {
             let col;
             function selectPlacement(selectedRow, selectedCol) {
                 let gameState = gameManager.getGameState()
-                console.log('gameState: '+gameState)
-                if ((this.number === 1 && isPlayer1Turn === true) || (this.number ===2 && isPlayer1Turn === false)) {
-                    if (gameState === '') {
-                        this.row = Number(selectedRow)
-                        this.col = Number(selectedCol)
-                        gameManager.placeMarker(this)     
-                        isPlayer1Turn = !isPlayer1Turn              
+                let canSelect = checkArrayElement(selectedRow, selectedCol)
+                if (canSelect === true) {
+                    if ((this.number === 1 && isPlayer1Turn === true) || (this.number ===2 && isPlayer1Turn === false)) {
+                        if (gameState === '') {
+                            this.row = Number(selectedRow)
+                            this.col = Number(selectedCol)
+                            gameManager.placeMarker(this)     
+                            isPlayer1Turn = !isPlayer1Turn              
+                        } else {
+                            console.log('game ended already stop playing...')
+                        }
                     } else {
-                        console.log('game ended already stop playing...')
+                        console.log("It's the other player's turn!")
                     }
                 } else {
-                    console.log("It's the other player's turn!")
+                    console.log("That space is already occupied!")
                 }
+
             }
+
+            function checkArrayElement(row, col) {
+                let arrayElement = gameManager.getArrayElement(row, col)
+                console.log(arrayElement)
+                if (arrayElement !== '') {
+                    return false
+                } else {
+                    return true
+                }
+            } 
 
             return {number, marker, row, col, selectPlacement}
         }
