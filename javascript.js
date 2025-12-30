@@ -123,8 +123,13 @@ const game =  (function() {
             //use every to find ''
             //if its true anytime, return false
             for (let i = 0; i < 3; i++) {
-                isFull = 
+                isEmpty = (gameArray[i]).some(item => item === '')
+                console.log(isEmpty)
+                if (isEmpty === true) {
+                    return false
+                }
             }
+            return true
         }
 
         function checkGameState(marker) {
@@ -145,6 +150,7 @@ const game =  (function() {
                     gameState = 'tie'
                 }
             }
+            console.log("gameState should be: "+gameState)
             return gameState
         }   
         return {gameArray, placeMarker, checkGameState, gameState}
