@@ -118,12 +118,8 @@ const game =  (function() {
         }
 
         function checkTie() {
-            let isFull;
-            //go row by row with for i loop
-            //use every to find ''
-            //if its true anytime, return false
             for (let i = 0; i < 3; i++) {
-                isEmpty = (gameArray[i]).some(item => item === '')
+                let isEmpty = (gameArray[i]).some(item => item === '')
                 console.log(isEmpty)
                 if (isEmpty === true) {
                     return false
@@ -153,7 +149,7 @@ const game =  (function() {
             console.log("gameState should be: "+gameState)
             return gameState
         }   
-        return {gameArray, placeMarker, checkGameState, gameState}
+        return {placeMarker, checkGameState, gameState}
     })();
 
     const playerManager = (function() {
