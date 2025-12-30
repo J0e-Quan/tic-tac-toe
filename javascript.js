@@ -201,9 +201,17 @@ const game =  (function() {
                 } else {
                     return true
                 }
-            } 
+            }
 
-            return {number, marker, row, col, selectPlacement}
+            function getPlayerNumber() {
+                return this.number
+            }
+
+            function getPlayerMarker() {
+                return this.marker
+            }
+
+            return {number, marker, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
