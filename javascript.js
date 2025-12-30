@@ -152,23 +152,31 @@ const game =  (function() {
         return {placeMarker, checkGameState, gameState}
     })();
 
+
+
     const playerManager = (function() {
         //true: player1's turn ; false: player2's turn
-        let isPlayer1Turn;
+        let isPlayer1Turn = true
 
         function createPlayer(number, marker) {
             let row;
             let col;
             function selectPlacement(selectedRow, selectedCol) {
-                if (gameManager.gameState === '') {
-                    this.row = Number(selectedRow)
-                    this.col = Number(selectedCol)
-                    gameManager.placeMarker(this)      
-                    console.log("gameState: "+gameManager.gameState)              
+                if ((this.number === 1 && isPlayer1Turn === true) || (this.number ===2 && isPlayer1Turn === false)) {
+                    if (gameManager.gameState === '') {
+                        this.row = Number(selectedRow)
+                        this.col = Number(selectedCol)
+                        gameManager.placeMarker(this)     
+                        isPlayer1Turn = !isPlayer1Turn 
+                        console.log("gameState: "+gameManager.gameState)              
+                    } else {
+                        console.log('game ended already stop playing...')
+                    }
                 } else {
-                    console.log('game ended already stop playing...')
+                    console.log("It's the other player's turn!")
                 }
             }
+
             return {number, marker, row, col, selectPlacement}
         }
 
@@ -179,11 +187,3 @@ const game =  (function() {
     })();
     return {gameManager, playerManager}
 })();
-
-
-
-
-//iife for gameManager
-//gameManager toggles a boolean to determine turns
-//gamemanager creates players
-//gamemanager checks for wins (arrays of coords) and draws (no win but all spaces are filled)
