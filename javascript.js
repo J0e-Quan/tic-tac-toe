@@ -1,7 +1,6 @@
 const game =  (function() {
-
-
     const gameManager = (function() {
+        let gameState = ''
         let gameArray = [
             ['', '', ''],
             ['', '', ''],
@@ -12,11 +11,11 @@ const game =  (function() {
             let col = --player.col
             gameArray[row][col] = player.marker
             console.log(gameArray)   
-            checkGameState()
+            checkGameState(player.marker)
         }
 
-        function checkPlayer1Markers() {
-            let player1Markers = gameArray.filter((item) => item === "O")
+        function checkPlayer1Markers(marker) {
+            let player1Markers = getPlayerMarkers(marker)
             let player1WinConditions = [[
                 ['O', 'O', 'O'],
                 ['', '', ''],
@@ -50,20 +49,103 @@ const game =  (function() {
                 ['', 'O', ''],
                 ['O', '', '']                  
             ]]           
-            compareMarkers(player1Markers, player1WinConditions)                                                          
+            return compareMarkers(player1Markers, player1WinConditions)                                                          
+        }
+
+        function checkPlayer2Markers(marker) {
+            let player2Markers = getPlayerMarkers(marker)
+            let player2WinConditions = [[
+                ['X', 'X', 'X'],
+                ['', '', ''],
+                ['', '', '']                
+            ], [
+                ['', '', ''],
+                ['X', 'X', 'X'],
+                ['', '', '']                  
+            ], [
+                ['', '', ''],
+                ['', '', ''],
+                ['X', 'X', 'X']                  
+            ], [
+                ['X', '', ''],
+                ['X', '', ''],
+                ['X', '', '']                  
+            ], [
+                ['', 'X', ''],
+                ['', 'X', ''],
+                ['', 'X', '']                  
+            ], [
+                ['', '', 'X'],
+                ['', '', 'X'],
+                ['', '', 'X']                  
+            ], [
+                ['X', '', ''],
+                ['', 'X', ''],
+                ['', '', 'X']                  
+            ], [
+                ['', '', 'X'],
+                ['', 'X', ''],
+                ['X', '', '']                  
+            ]]           
+            return compareMarkers(player2Markers, player2WinConditions)                                                          
+        }
+
+        function getPlayerMarkers(playerMarker) {
+            let filteredArray = []
+            let filterMarker = playerMarker
+            for (let i = 0; i < 3; i++) {
+                let filteredRow = gameArray[i].map((item) => {
+                    if (item === filterMarker || item === '') {
+                        item = item
+                    } else {
+                        item = ''
+                    }
+                    return item
+                })
+                filteredArray.push(filteredRow)
+            }
+            console.log(filteredArray)
+            return filteredArray
         }
 
         function compareMarkers(markers, winConditions) {
-            //Compare number of rows
-            //Compare number of columns in each row
-            //Compare values of each index
+            for (array of winConditions) {
+                let markersString = markers.map(row => row.join(',')).join(';')
+                let arrayString = array.map(row => row.join(',')).join(';')
+                if (markersString === arrayString) {
+                    return true
+                }
+            }
         }
 
-        function checkGameState() {
-            let didPlayer1Win = checkPlayer1Markers()
+        function checkTie() {
+            //go row by row with for i loop
+            //use every to find ''
+            //if its true anytime, return
+        }
+
+        function checkGameState(marker) {
+            let didPlayer1Win;
+            let didPlayer2Win;
+            if (marker === 'O') {
+                didPlayer1Win = checkPlayer1Markers(marker)
+            } else if (marker === 'X') {
+                didPlayer2Win = checkPlayer2Markers(marker)
+            }
+            if (didPlayer1Win === true) {
+                gameState = 'player1Win'
+            } else if (didPlayer2Win === true) {
+                gameState = 'player2Win'
+            } else {
+                let isTie = checkTie()
+                if (isTie === true) {
+                    gameState = 'tie'
+                }
+            }
+            console.log("gameState: "+gameState)
         }         
 
-        return {gameArray, placeMarker, determineWinner, checkGameState}
+        return {gameArray, placeMarker, checkGameState}
     })();
 
     const playerManager = (function() {
@@ -86,7 +168,7 @@ const game =  (function() {
 
         return {isPlayer1Turn, player1, player2}
     })();
-    return {gameManager, gameBoard}
+    return {gameManager, playerManager}
 })();
 
 
