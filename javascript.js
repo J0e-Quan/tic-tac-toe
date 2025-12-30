@@ -10,9 +10,10 @@ const game =  (function() {
         function placeMarker(player) {
             let row = --player.row
             let col = --player.col
-            gameArray[row][col] = player.marker
+            let marker = player.getPlayerMarker()
+            gameArray[row][col] = marker
             console.log(gameArray)   
-            checkGameState(player.marker)
+            checkGameState(marker)
         }
 
         function getArrayElement(row, col) {
@@ -22,7 +23,7 @@ const game =  (function() {
         }
 
         function checkPlayer1Markers(marker) {
-            let player1Markers = getPlayerMarkers(marker)
+            let player1Markers = filterArray(marker)
             let player1WinConditions = [[
                 ['O', 'O', 'O'],
                 ['', '', ''],
@@ -60,7 +61,7 @@ const game =  (function() {
         }
 
         function checkPlayer2Markers(marker) {
-            let player2Markers = getPlayerMarkers(marker)
+            let player2Markers = filterArray(marker)
             let player2WinConditions = [[
                 ['X', 'X', 'X'],
                 ['', '', ''],
@@ -97,7 +98,7 @@ const game =  (function() {
             return compareMarkers(player2Markers, player2WinConditions)                                                          
         }
 
-        function getPlayerMarkers(playerMarker) {
+        function filterArray(playerMarker) {
             let filteredArray = []
             let filterMarker = playerMarker
             for (let i = 0; i < 3; i++) {
@@ -169,13 +170,13 @@ const game =  (function() {
         let isPlayer1Turn = true
 
         function createPlayer(number, marker) {
-            let row;
-            let col;
             function selectPlacement(selectedRow, selectedCol) {
                 let gameState = gameManager.getGameState()
                 let canSelect = checkArrayElement(selectedRow, selectedCol)
                 if (canSelect === true) {
-                    if ((this.number === 1 && isPlayer1Turn === true) || (this.number ===2 && isPlayer1Turn === false)) {
+                    let playerNumber = this.getPlayerNumber()
+                    console.log(playerNumber)
+                    if ((playerNumber === 1 && isPlayer1Turn === true) || (playerNumber ===2 && isPlayer1Turn === false)) {
                         if (gameState === '') {
                             this.row = Number(selectedRow)
                             this.col = Number(selectedCol)
@@ -195,7 +196,6 @@ const game =  (function() {
 
             function checkArrayElement(row, col) {
                 let arrayElement = gameManager.getArrayElement(row, col)
-                console.log(arrayElement)
                 if (arrayElement !== '') {
                     return false
                 } else {
@@ -204,14 +204,14 @@ const game =  (function() {
             }
 
             function getPlayerNumber() {
-                return this.number
+                return number
             }
 
             function getPlayerMarker() {
-                return this.marker
+                return marker
             }
 
-            return {number, marker, selectPlacement}
+            return {getPlayerNumber, getPlayerMarker, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
