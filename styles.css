@@ -26,4 +26,70 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Urbanist', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10rem;
+    background-color: rgb(67, 67, 67);
+    color: white;
+    padding: 48px;
+}
+
+.UI {
+    max-width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-size: 5rem;
+    text-align: center;
+}
+
+.player-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player1 {
+    fill: rgb(0, 100, 255);
+    stroke-width: 0.2;
+    stroke: rgb(167, 167, 167) ;
+}
+
+.player2 {
+    fill: rgb(255, 60, 0);
+    stroke-width: 0.2;
+    stroke: rgb(167, 167, 167) ;
+}
+
+.instruction {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.board {
+    max-width: 50vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.box {
+    width: 10rem;
+    height: 10rem;
 }
