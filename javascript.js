@@ -11,7 +11,7 @@ const game =  (function() {
             let col = --player.col
             gameArray[row][col] = player.marker
             console.log(gameArray)   
-            checkGameState(player.marker)
+            gameState = checkGameState(player.marker)
         }
 
         function checkPlayer1Markers(marker) {
@@ -104,7 +104,6 @@ const game =  (function() {
                 })
                 filteredArray.push(filteredRow)
             }
-            console.log(filteredArray)
             return filteredArray
         }
 
@@ -142,10 +141,10 @@ const game =  (function() {
                     gameState = 'tie'
                 }
             }
-            console.log("gameState: "+gameState)
-        }         
-
-        return {gameArray, placeMarker, checkGameState}
+            return gameState
+        }   
+        console.log("gameState according to gameManager: "+gameState)  
+        return {gameArray, placeMarker, checkGameState, gameState}
     })();
 
     const playerManager = (function() {
@@ -156,9 +155,14 @@ const game =  (function() {
             let row;
             let col;
             function selectPlacement(selectedRow, selectedCol) {
-                this.row = Number(selectedRow)
-                this.col = Number(selectedCol)
-                gameManager.placeMarker(this)
+                if (gameManager.gameState === '') {
+                    this.row = Number(selectedRow)
+                    this.col = Number(selectedCol)
+                    gameManager.placeMarker(this)      
+                    console.log("gameState: "+gameManager.gameState)              
+                } else {
+                    console.log('game ended already stop playing...')
+                }
             }
             return {number, marker, row, col, selectPlacement}
         }
