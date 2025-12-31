@@ -211,6 +211,7 @@ const game =  (function() {
                 ['', '', ''],
                 ['', '', '']
             ]            
+            playerManager.resetPlayerTurn()
             displayManager.clearGrid()
         }
 
@@ -226,6 +227,10 @@ const game =  (function() {
          function getPlayerTurn() {
             return isPlayer1Turn
         }        
+
+        function resetPlayerTurn() {
+            isPlayer1Turn = true
+        }
 
         function createPlayer(number, marker) {
             let playerName
@@ -300,7 +305,7 @@ const game =  (function() {
         let player1 = createPlayer(1, "O")
         let player2 = createPlayer(2, "X")
 
-        return {player1, player2, getPlayerTurn}
+        return {player1, player2, getPlayerTurn, resetPlayerTurn}
     })();
 
 
@@ -378,15 +383,6 @@ const game =  (function() {
             } 
         }
 
-        function clearGrid() {
-            let boxes = document.querySelectorAll('.box')
-            boxes.forEach((box) => {
-                box.textContent = ''
-                box.style.color = ''
-            })
-            updateInstruction(true, true)
-        }
-
         function updateInstruction(isPlayer1Turn, canPlace) {
             let instructionText = document.querySelector('.instruction')
             let gameState = gameManager.getGameState()
@@ -417,7 +413,7 @@ const game =  (function() {
             if (gameState === 'player1Win') {
                 let winningPlayerScoreDisplay = document.querySelector('.player.one.score')
                 winningPlayerScoreDisplay.textContent = 'Score: '+playerManager.player1.getPlayerScore()
-            } else if (gameState === 'player2win') {
+            } else if (gameState === 'player2Win') {
                 let winningPlayerScoreDisplay = document.querySelector('.player.two.score')
                 winningPlayerScoreDisplay.textContent = 'Score: '+playerManager.player2.getPlayerScore()
             }
@@ -435,6 +431,22 @@ const game =  (function() {
         replayButton.addEventListener('click', () => {
             gameManager.newGame()
         })
+
+        function clearGrid() {
+            let boxes = document.querySelectorAll('.box')
+            boxes.forEach((box) => {
+                box.textContent = ''
+                box.style.color = ''
+            })
+            resetHighlight()
+            updateInstruction(true, true)
+        }
+        
+        function resetHighlight() {
+            let players = document.querySelectorAll('.player')
+            players.forEach((item) => item.classList.remove('winner'))
+            highlightPlayer()
+        }
     
         return {updateInstruction, updateScore, clearGrid}
     })();
