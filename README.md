@@ -5,7 +5,7 @@ Live demo link: https://j0e-quan.github.io/tic-tac-toe/
 
 ## Technologies used:
  - HTML for basic page layout
- - CSS for styling elements and use of custom fonts
+ - CSS for styling elements and use of custom fonts (Inter)
  - Flexbox and Grid for arranging elements
  - JavaScript for handling game logic
  - Git for version control
