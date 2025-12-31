@@ -12,7 +12,6 @@ const game =  (function() {
             let col = --player.col
             let marker = player.getPlayerMarker()
             gameArray[row][col] = marker
-            console.log(gameArray)   
             checkGameState(marker)
         }
 
@@ -116,10 +115,10 @@ const game =  (function() {
         }
 
         function compareMarkers(markers, winConditions) {
-            for (array of winConditions) {
+            for (condition of winConditions) {
                 let markersString = markers.map(row => row.join(',')).join(';')
-                let arrayString = array.map(row => row.join(',')).join(';')
-                if (markersString === arrayString) {
+                let conditionString = condition.map(row => row.join(',')).join(';')
+                if (markersString === conditionString) {
                     return true
                 }
             }
@@ -128,7 +127,6 @@ const game =  (function() {
         function checkTie() {
             for (let i = 0; i < 3; i++) {
                 let isEmpty = (gameArray[i]).some(item => item === '')
-                console.log(isEmpty)
                 if (isEmpty === true) {
                     return false
                 }
@@ -154,7 +152,6 @@ const game =  (function() {
                     gameState = 'tie'
                 }
             }
-            console.log("gameState should be: "+gameState)
         }   
 
         function getGameState() {
@@ -188,15 +185,12 @@ const game =  (function() {
                             game.displayManager.updateInstruction(isPlayer1Turn, true)
                             return true         
                         } else {
-                            console.log('game ended already stop playing...')
                             return false
                         }
                     } else {
-                        console.log("It's the other player's turn!")
                         return false
                     }
                 } else {
-                    console.log("That space is already occupied!")
                     game.displayManager.updateInstruction(isPlayer1Turn, false)
                     return false
                 }
