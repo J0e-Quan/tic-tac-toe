@@ -1,7 +1,6 @@
 const game =  (function() {
     const gameManager = (function() {
         let gameState = ''
-        let markersPlaced = 0
         let gameArray = [
             ['', '', ''],
             ['', '', ''],
@@ -13,7 +12,6 @@ const game =  (function() {
             let col = --player.col
             let marker = player.getPlayerMarker()
             gameArray[row][col] = marker
-            markersPlaced++
             checkGameState(marker)
         }
 
@@ -117,54 +115,52 @@ const game =  (function() {
         }
 
         function compareMarkers(inputMarkers, winConditions, marker) {
-            if (markersPlaced >=5) {
-                for (c = 0; c < winConditions.length; c++) {
-                    let matchedRows = 0;
-                    let markers = inputMarkers
-                    let condition = winConditions[c]
-                    for (r = 0; r < 3; r++) {
-                        let markersRow = markers[r]
-                        let conditionRow = condition[r]
-                        let isRowMatch
-                        let requiredMatches = (conditionRow.filter(item => item === marker)).length
-                        for (i = 0; i < 3; i++) {
-                            if (requiredMatches === 0) {
-                                isRowMatch = true
-                                break
-                            } else {
-                                let markersItem = markersRow[i]
-                                let conditionItem = conditionRow[i]
-                                let isMatch
-                                if (conditionItem === marker) {
-                                    isMatch = (markersItem === conditionItem)
-                                    if (isMatch === true) {
-                                        requiredMatches--
-                                        if (requiredMatches === 0) {
-                                            isRowMatch = true
-                                            break
-                                        } else {
-                                            continue
-                                        }
-                                    } else if (isMatch === false) {
-                                        isRowMatch = false
+            for (c = 0; c < winConditions.length; c++) {
+                let matchedRows = 0;
+                let markers = inputMarkers
+                let condition = winConditions[c]
+                for (r = 0; r < 3; r++) {
+                    let markersRow = markers[r]
+                    let conditionRow = condition[r]
+                    let isRowMatch
+                    let requiredMatches = (conditionRow.filter(item => item === marker)).length
+                    for (i = 0; i < 3; i++) {
+                        if (requiredMatches === 0) {
+                            isRowMatch = true
+                            break
+                        } else {
+                            let markersItem = markersRow[i]
+                            let conditionItem = conditionRow[i]
+                            let isMatch
+                            if (conditionItem === marker) {
+                                isMatch = (markersItem === conditionItem)
+                                if (isMatch === true) {
+                                    requiredMatches--
+                                    if (requiredMatches === 0) {
+                                        isRowMatch = true
                                         break
+                                    } else {
+                                        continue
                                     }
-                                } else if (conditionItem !== marker) {
-                                    continue
+                                } else if (isMatch === false) {
+                                    isRowMatch = false
+                                    break
                                 }
+                            } else if (conditionItem !== marker) {
+                                continue
                             }
                         }
-                        if (isRowMatch === true) {
-                            matchedRows++
-                        } else if (isRowMatch === false) {
-                            continue
-                        }
                     }
-                    if (matchedRows === 3) {
-                        return true
-                    } else {
+                    if (isRowMatch === true) {
+                        matchedRows++
+                    } else if (isRowMatch === false) {
                         continue
                     }
+                }
+                if (matchedRows === 3) {
+                    return true
+                } else {
+                    continue
                 }
             }
         }
@@ -189,12 +185,17 @@ const game =  (function() {
             }
             if (didPlayer1Win === true) {
                 gameState = 'player1Win'
+                playerManager.player1.increasePlayerScore()
+                displayManager.updateScore()
             } else if (didPlayer2Win === true) {
                 gameState = 'player2Win'
+                playerManager.player2.increasePlayerScore()
+                displayManager.updateScore()
             } else {
                 let isTie = checkTie()
                 if (isTie === true) {
                     gameState = 'tie'
+                    displayManager.updateScore()
                 }
             }
         }   
@@ -202,7 +203,18 @@ const game =  (function() {
         function getGameState() {
             return gameState
         }
-        return {placeMarker, checkGameState, getGameState, getArrayElement}
+
+        function newGame() {
+            gameState = ''
+            gameArray = [
+                ['', '', ''],
+                ['', '', ''],
+                ['', '', '']
+            ]            
+            displayManager.clearGrid()
+        }
+
+        return {placeMarker, checkGameState, getGameState, getArrayElement, newGame}
     })();
 
 
@@ -216,7 +228,8 @@ const game =  (function() {
         }        
 
         function createPlayer(number, marker) {
-            let playerName;
+            let playerName
+            let score = 0
             createPlayerName()
 
             function selectPlacement(selectedRow, selectedCol) {
@@ -273,7 +286,15 @@ const game =  (function() {
                 return playerName
             }
 
-            return {getPlayerNumber, getPlayerMarker, getPlayerName, selectPlacement}
+            function getPlayerScore() {
+                return score
+            }
+
+            function increasePlayerScore() {
+                score++
+            }
+
+            return {getPlayerNumber, getPlayerMarker, getPlayerName, getPlayerScore, increasePlayerScore, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
@@ -286,6 +307,7 @@ const game =  (function() {
 
     const displayManager = (function() {
         let grid = document.querySelector('.board')
+        let replayButton = document.createElement('button')
         let targetRow;
         let targetCol;
         showPlayerName()
@@ -356,6 +378,15 @@ const game =  (function() {
             } 
         }
 
+        function clearGrid() {
+            let boxes = document.querySelectorAll('.box')
+            boxes.forEach((box) => {
+                box.textContent = ''
+                box.style.color = ''
+            })
+            updateInstruction(true, true)
+        }
+
         function updateInstruction(isPlayer1Turn, canPlace) {
             let instructionText = document.querySelector('.instruction')
             let gameState = gameManager.getGameState()
@@ -372,16 +403,40 @@ const game =  (function() {
                 }
             } else if (gameState !== '') {
                 if (gameState === 'player1Win') {
-                    instructionText.textContent = player1Name + " wins! Refresh the page to play again..."
+                    instructionText.textContent = player1Name + " wins! Click the button below the grid to play again..."
                 } else if (gameState === 'player2Win') {
-                    instructionText.textContent = player2Name + " wins! Refresh the page to play again..."
+                    instructionText.textContent = player2Name + " wins! Click the button below the grid to play again..."
                 } else if (gameState === 'tie') {
-                    instructionText.textContent = "It's a tie! Refresh the page to play again..."
+                    instructionText.textContent = "It's a tie! Click the button below the grid to play again..."
                 }
             }
         }
+
+        function updateScore() {
+            let gameState = gameManager.getGameState()
+            if (gameState === 'player1Win') {
+                let winningPlayerScoreDisplay = document.querySelector('.player.one.score')
+                winningPlayerScoreDisplay.textContent = 'Score: '+playerManager.player1.getPlayerScore()
+            } else if (gameState === 'player2win') {
+                let winningPlayerScoreDisplay = document.querySelector('.player.two.score')
+                winningPlayerScoreDisplay.textContent = 'Score: '+playerManager.player2.getPlayerScore()
+            }
+            showReplayButton()
+        }
+
+        function showReplayButton() {
+            replayButton.type = 'button'
+            replayButton.textContent = 'Play again'
+            replayButton.classList.add('replay')
+            let board = document.querySelector('.board')
+            board.appendChild(replayButton)
+        }
+
+        replayButton.addEventListener('click', () => {
+            gameManager.newGame()
+        })
     
-        return {updateInstruction}
+        return {updateInstruction, updateScore, clearGrid}
     })();
     return {gameManager, playerManager, displayManager}
 })();
