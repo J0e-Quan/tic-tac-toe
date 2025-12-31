@@ -185,6 +185,7 @@ const game =  (function() {
                             this.col = Number(selectedCol)
                             gameManager.placeMarker(this)     
                             isPlayer1Turn = !isPlayer1Turn     
+                            game.displayManager.updateInstruction(isPlayer1Turn, true)
                             return true         
                         } else {
                             console.log('game ended already stop playing...')
@@ -196,6 +197,7 @@ const game =  (function() {
                     }
                 } else {
                     console.log("That space is already occupied!")
+                    game.displayManager.updateInstruction(isPlayer1Turn, false)
                     return false
                 }
 
@@ -231,13 +233,10 @@ const game =  (function() {
 
     const displayManager = (function() {
         let grid = document.querySelector('.board')
-        let row1 = document.querySelectorAll('.row1')
-        let row2 = document.querySelectorAll('.row2')
-        let row3 = document.querySelectorAll('.row3')
-        let gridArray = [Array.from(row1), Array.from(row2), Array.from(row3)]
         let targetRow;
         let targetCol;
         highlightPlayer()
+        updateInstruction(true, true)
 
         grid.addEventListener('click', (btn) => {
             targetRow = btn.target.classList[1]
@@ -275,15 +274,33 @@ const game =  (function() {
                 }
                 highlightPlayer()
             } else if (canPlace === false) {
-
             } 
         }
 
-        function updateInstruction() {
-
+        function updateInstruction(isPlayer1Turn, canPlace) {
+            let instructionText = document.querySelector('.instruction')
+            let gameState = gameManager.getGameState()
+            if (gameState === '' ) {
+                if (isPlayer1Turn === true) {
+                    instructionText.textContent = "It's Player 1's turn! Select an empty box on the grid!"
+                } else if (isPlayer1Turn === false) {
+                    instructionText.textContent = "It's Player 2's turn! Select an empty box on the grid!"
+                }
+                if (canPlace === false) {
+                    instructionText.textContent = "This box is already occupied! Please select a different one."
+                }
+            } else if (gameState !== '') {
+                if (gameState === 'player1Win') {
+                    instructionText.textContent = "Player 1 wins! Refresh the page to play again..."
+                } else if (gameState === 'player2Win') {
+                    instructionText.textContent = "Player 2 wins! Refresh the page to play again..."
+                } else if (gameState === 'tie') {
+                    instructionText.textContent = "It's a tie! Refresh the page to play again..."
+                }
+            }
         }
     
-        return {gridArray}
+        return {updateInstruction}
     })();
     return {gameManager, playerManager, displayManager}
 })();
