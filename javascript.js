@@ -134,18 +134,13 @@ const game =  (function() {
             //NEW METHOD
             //pseudocode:
         /*  if more than 5 markers placed (win is possible),
-            get 1st win condition and filteredArray
-            let matchedRows = 0
-            get first row of both
-            check if marker in win condition is also present in filteredArray
-            if no, return false (END)
+            get 1st win condition and filteredArray     <----------<-----------|
+            let matchedRows = 0                                                |
+            get first row of both                                              ^
+            check if marker in win condition is also present in filteredArray  |
+            if no, get next win condition and repeat       --------->----------|
             if yes, matchedRows++, go to next row and check again
-            if matchedRows = 3 (all rows match), go back to first line
-            check if number of markers in filteredArray >= number of markers in win condition
-            if no, return false (END)
-            if yes, go to next row and check again
-            if everything matches, return true (END)
-            if not, get next win condition and repeat
+            if matchedRows = 3 (all rows match), return true (END)
         */
             if (markersPlaced >=5) {
                 for (condition of winConditions) {
