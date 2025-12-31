@@ -320,9 +320,11 @@ const game =  (function() {
         updateInstruction(true, true)
 
         grid.addEventListener('click', (btn) => {
-            targetRow = btn.target.classList[1]
-            targetCol = btn.target.classList[2]
-            updateGrid(btn.target)
+            if (!(btn.target.classList.contains('replay'))) {
+                targetRow = btn.target.classList[1]
+                targetCol = btn.target.classList[2]
+                updateGrid(btn.target)
+            }
         })
 
         function showPlayerName() {
@@ -430,6 +432,7 @@ const game =  (function() {
 
         replayButton.addEventListener('click', () => {
             gameManager.newGame()
+            replayButton.remove()
         })
 
         function clearGrid() {
