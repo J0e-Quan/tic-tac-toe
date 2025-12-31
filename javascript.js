@@ -184,15 +184,19 @@ const game =  (function() {
                             this.row = Number(selectedRow)
                             this.col = Number(selectedCol)
                             gameManager.placeMarker(this)     
-                            isPlayer1Turn = !isPlayer1Turn              
+                            isPlayer1Turn = !isPlayer1Turn     
+                            return true         
                         } else {
                             console.log('game ended already stop playing...')
+                            return false
                         }
                     } else {
                         console.log("It's the other player's turn!")
+                        return false
                     }
                 } else {
                     console.log("That space is already occupied!")
+                    return false
                 }
 
             }
@@ -252,19 +256,27 @@ const game =  (function() {
         function updateGrid(btn) {
             let isPlayer1Turn = playerManager.getPlayerTurn()
             let marker;
+            let canPlace;
             let row = targetRow.slice(-1)
             let col = targetCol.slice(-1)
             if (isPlayer1Turn === true) {
                 marker = playerManager.player1.getPlayerMarker()
-                playerManager.player1.selectPlacement(row, col)
-                btn.style.color = 'rgb(0, 100, 255)'
+                canPlace = playerManager.player1.selectPlacement(row, col)
             } else if (isPlayer1Turn === false) {
                 marker = playerManager.player2.getPlayerMarker()
-                playerManager.player2.selectPlacement(row,col)
-                btn.style.color = 'rgb(255, 50, 50)'
+                canPlace = playerManager.player2.selectPlacement(row,col)
             }
-            btn.textContent = marker
-            highlightPlayer()
+            if (canPlace === true) {
+                btn.textContent = marker
+                if (isPlayer1Turn === true) {
+                    btn.style.color = 'rgb(0, 100, 255)'
+                } else if (isPlayer1Turn === false) {
+                    btn.style.color = 'rgb(255, 50, 50)'
+                }
+                highlightPlayer()
+            } else if (canPlace === false) {
+
+            } 
         }
 
         function updateInstruction() {
