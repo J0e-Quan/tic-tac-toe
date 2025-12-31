@@ -216,7 +216,8 @@ const game =  (function() {
         }        
 
         function createPlayer(number, marker) {
-            const name = prompt("Enter Player 1's name")
+            let playerName;
+            createPlayerName()
 
             function selectPlacement(selectedRow, selectedCol) {
                 let gameState = gameManager.getGameState()
@@ -261,8 +262,15 @@ const game =  (function() {
                 return marker
             }
 
+            function createPlayerName() {
+                playerName = prompt("Enter Player " + getPlayerNumber() + "'s name")
+                if (playerName === '' || playerName === null) {
+                    playerName = "Player "+getPlayerNumber()
+                }
+            }
+
             function getPlayerName() {
-                return name
+                return playerName
             }
 
             return {getPlayerNumber, getPlayerMarker, getPlayerName, selectPlacement}
@@ -288,6 +296,10 @@ const game =  (function() {
             targetCol = btn.target.classList[2]
             updateGrid(btn.target)
         })
+
+        function showPlayerName() {
+            
+        }
 
         function highlightPlayer() {
             let isPlayer1Turn = playerManager.getPlayerTurn()
