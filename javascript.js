@@ -246,9 +246,27 @@ const game =  (function() {
 
         function highlightPlayer() {
             let isPlayer1Turn = playerManager.getPlayerTurn()
+            let gameState = gameManager.getGameState()
+            let player1 = document.querySelectorAll('.one')
+            let player2 = document.querySelectorAll('.two')
             if (isPlayer1Turn === true) {
-                let player1 = document.querySelectorAll('.one')
                 player1.forEach((item) => item.classList.add('highlight'))
+                player2.forEach((item) => item.classList.remove('highlight'))
+            } else if (isPlayer1Turn === false) {
+                player2.forEach((item) => item.classList.add('highlight'))
+                player1.forEach((item) => item.classList.remove('highlight'))                
+            }
+            if (gameState !== '') {
+                if (gameState === 'player1Win') {
+                    player1.forEach((item) => item.classList.add('winner'))         
+                    player2.forEach((item) => item.classList.remove('highlight'))                               
+                } else if (gameState === 'player2Win') {
+                    player2.forEach((item) => item.classList.add('winner'))        
+                    player1.forEach((item) => item.classList.remove('highlight'))                                        
+                } else if (gameState === 'tie') {
+                    player1.forEach((item) => item.classList.add('winner'))         
+                    player2.forEach((item) => item.classList.add('winner'))         
+                }
             }
         }
 
