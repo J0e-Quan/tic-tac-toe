@@ -288,6 +288,7 @@ const game =  (function() {
         let grid = document.querySelector('.board')
         let targetRow;
         let targetCol;
+        showPlayerName()
         highlightPlayer()
         updateInstruction(true, true)
 
@@ -298,7 +299,10 @@ const game =  (function() {
         })
 
         function showPlayerName() {
-            
+            let player1NameDisplay = document.querySelector('.player.one.name')
+            let player2NameDisplay = document.querySelector('.player.two.name')
+            player1NameDisplay.textContent = playerManager.player1.getPlayerName()
+            player2NameDisplay.textContent = playerManager.player2.getPlayerName()
         }
 
         function highlightPlayer() {

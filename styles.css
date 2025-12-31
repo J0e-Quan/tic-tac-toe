@@ -43,7 +43,7 @@ body {
     gap: 10rem;
     background-color: rgb(67, 67, 67);
     color: white;
-    padding: 32px 48px;
+    padding: 24px 48px;
 }
 
 .UI {
@@ -77,6 +77,9 @@ body {
 
 .player-icon-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .player.marker {
@@ -114,8 +117,12 @@ body {
 }
 
 .player.name {
-    font-size: 5rem;
+    font-size: 1.5rem;
+    color: white;
     text-align: center;
+    margin-top: -24px;
+    max-width: 15rem;
+    filter: none;
 }
 
 .instruction {
