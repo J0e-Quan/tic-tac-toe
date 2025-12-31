@@ -117,4 +117,8 @@ body {
 .box {
     width: 10rem;
     height: 10rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 7.5rem;
+    font-weight: 600;
+    text-align: center;
 }

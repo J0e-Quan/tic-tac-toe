@@ -169,13 +169,16 @@ const game =  (function() {
         //true: player1's turn ; false: player2's turn
         let isPlayer1Turn = true
 
+         function getPlayerTurn() {
+            return isPlayer1Turn
+        }        
+
         function createPlayer(number, marker) {
             function selectPlacement(selectedRow, selectedCol) {
                 let gameState = gameManager.getGameState()
                 let canSelect = checkArrayElement(selectedRow, selectedCol)
                 if (canSelect === true) {
                     let playerNumber = this.getPlayerNumber()
-                    console.log(playerNumber)
                     if ((playerNumber === 1 && isPlayer1Turn === true) || (playerNumber ===2 && isPlayer1Turn === false)) {
                         if (gameState === '') {
                             this.row = Number(selectedRow)
@@ -211,17 +214,13 @@ const game =  (function() {
                 return marker
             }
 
-            function getPlayerTurn() {
-                return isPlayer1Turn
-            }
-
-            return {getPlayerNumber, getPlayerMarker, getPlayerTurn, selectPlacement}
+            return {getPlayerNumber, getPlayerMarker, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
         let player2 = createPlayer(2, "X")
 
-        return {player1, player2}
+        return {player1, player2, getPlayerTurn}
     })();
 
 
@@ -234,17 +233,42 @@ const game =  (function() {
         let gridArray = [Array.from(row1), Array.from(row2), Array.from(row3)]
         let targetRow;
         let targetCol;
+        highlightPlayer()
 
-        grid.addEventListener('click', (event) => {
-            let buttonRow = event.target.classList[1]
-            let buttonCol = event.target.classList[2]
-            targetRow = buttonRow.slice(-1)
-            targetCol = buttonCol.slice(-1)
-            updateGrid()
+        grid.addEventListener('click', (btn) => {
+            targetRow = btn.target.classList[1]
+            targetCol = btn.target.classList[2]
+            updateGrid(btn.target)
         })
 
-        function updateGrid() {
-            
+        function highlightPlayer() {
+            let isPlayer1Turn = playerManager.getPlayerTurn()
+            if (isPlayer1Turn === true) {
+                let player1 = document.querySelectorAll('.one')
+                player1.forEach((item) => item.classList.add('highlight'))
+            }
+        }
+
+        function updateGrid(btn) {
+            let isPlayer1Turn = playerManager.getPlayerTurn()
+            let marker;
+            let row = targetRow.slice(-1)
+            let col = targetCol.slice(-1)
+            if (isPlayer1Turn === true) {
+                marker = playerManager.player1.getPlayerMarker()
+                playerManager.player1.selectPlacement(row, col)
+                btn.style.color = 'rgb(0, 100, 255)'
+            } else if (isPlayer1Turn === false) {
+                marker = playerManager.player2.getPlayerMarker()
+                playerManager.player2.selectPlacement(row,col)
+                btn.style.color = 'rgb(255, 50, 50)'
+            }
+            btn.textContent = marker
+            highlightPlayer()
+        }
+
+        function updateInstruction() {
+
         }
     
         return {gridArray}
