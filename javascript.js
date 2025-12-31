@@ -1,6 +1,7 @@
 const game =  (function() {
     const gameManager = (function() {
         let gameState = ''
+        let markersPlaced = 0
         let gameArray = [
             ['', '', ''],
             ['', '', ''],
@@ -12,6 +13,7 @@ const game =  (function() {
             let col = --player.col
             let marker = player.getPlayerMarker()
             gameArray[row][col] = marker
+            markersPlaced++
             checkGameState(marker)
         }
 
@@ -115,12 +117,58 @@ const game =  (function() {
         }
 
         function compareMarkers(markers, winConditions) {
-            for (condition of winConditions) {
-                let markersString = markers.map(row => row.join(',')).join(';')
-                let conditionString = condition.map(row => row.join(',')).join(';')
-                if (markersString === conditionString) {
-                    return true
-                }
+            //OLD METHOD (does not detect correctly unless it's an EXACT match)
+            // for (condition of winConditions) {
+            //     let markersString = markers.map(row => row.join(' ')).join(';')
+            //     let conditionString = condition.map(row => row.join(' ')).join(';')
+            //     let markersArray = markersString.split('')
+            //     let conditionArray = conditionString.split('')
+            //     console.log("filtered  array: ")
+            //     console.log(markers)
+            //     console.log("win condition: ")
+            //     console.log(condition)
+            //     if (markersString === conditionString) {
+            //         return true
+            //     }
+
+            //NEW METHOD
+            //pseudocode:
+        /*  if more than 5 markers placed (win is possible),
+            get 1st win condition and filteredArray
+            let matchedRows = 0
+            get first row of both
+            check if marker in win condition is also present in filteredArray
+            if no, return false (END)
+            if yes, matchedRows++, go to next row and check again
+            if matchedRows = 3 (all rows match), go back to first line
+            check if number of markers in filteredArray >= number of markers in win condition
+            if no, return false (END)
+            if yes, go to next row and check again
+            if everything matches, return true (END)
+            if not, get next win condition and repeat
+        */
+            if (markersPlaced >=5) {
+                for (condition of winConditions) {
+                    let matchedRows = 0
+                    for (let i = 0; i < 3; i++) {
+                        let markerRow = markers[i]
+                        let conditionRow = condition[i]
+                        console.log('markerRow: ')
+                        console.log(markerRow)
+                        console.log('conditionRow: ')
+                        console.log(conditionRow)
+                        let isMatch = conditionRow.every(item => markerRow.includes(item))
+                        console.log(isMatch)
+                        if (isMatch === true) {
+                            matchedRows = matchedRows++
+                        } 
+                    }
+                    if (matchedRows === 3) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }   
             }
         }
 
