@@ -1,4 +1,4 @@
-const game =  (function() {
+(function() {
     const gameManager = (function() {
         let gameState = ''
         let gameArray = [
@@ -16,8 +16,8 @@ const game =  (function() {
         }
 
         function getArrayElement(row, col) {
-            targetRow = --row
-            targetCol = --col
+            let targetRow = --row
+            let targetCol = --col
             return gameArray[targetRow][targetCol]
         }
 
@@ -115,16 +115,16 @@ const game =  (function() {
         }
 
         function compareMarkers(inputMarkers, winConditions, marker) {
-            for (c = 0; c < winConditions.length; c++) {
+            for (let c = 0; c < winConditions.length; c++) {
                 let matchedRows = 0;
                 let markers = inputMarkers
                 let condition = winConditions[c]
-                for (r = 0; r < 3; r++) {
+                for (let r = 0; r < 3; r++) {
                     let markersRow = markers[r]
                     let conditionRow = condition[r]
                     let isRowMatch
                     let requiredMatches = (conditionRow.filter(item => item === marker)).length
-                    for (i = 0; i < 3; i++) {
+                    for (let i = 0; i < 3; i++) {
                         if (requiredMatches === 0) {
                             isRowMatch = true
                             break
@@ -248,7 +248,7 @@ const game =  (function() {
                             this.col = Number(selectedCol)
                             gameManager.placeMarker(this)     
                             isPlayer1Turn = !isPlayer1Turn     
-                            game.displayManager.updateInstruction(isPlayer1Turn, true)
+                            displayManager.updateInstruction(isPlayer1Turn, true)
                             return true         
                         } else {
                             return false
@@ -257,7 +257,7 @@ const game =  (function() {
                         return false
                     }
                 } else {
-                    game.displayManager.updateInstruction(isPlayer1Turn, false)
+                    displayManager.updateInstruction(isPlayer1Turn, false)
                     return false
                 }
 
