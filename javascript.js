@@ -216,6 +216,8 @@ const game =  (function() {
         }        
 
         function createPlayer(number, marker) {
+            const name = prompt("Enter Player 1's name")
+
             function selectPlacement(selectedRow, selectedCol) {
                 let gameState = gameManager.getGameState()
                 let canSelect = checkArrayElement(selectedRow, selectedCol)
@@ -259,7 +261,11 @@ const game =  (function() {
                 return marker
             }
 
-            return {getPlayerNumber, getPlayerMarker, selectPlacement}
+            function getPlayerName() {
+                return name
+            }
+
+            return {getPlayerNumber, getPlayerMarker, getPlayerName, selectPlacement}
         }
 
         let player1 = createPlayer(1, "O")
@@ -337,20 +343,22 @@ const game =  (function() {
         function updateInstruction(isPlayer1Turn, canPlace) {
             let instructionText = document.querySelector('.instruction')
             let gameState = gameManager.getGameState()
+            let player1Name = playerManager.player1.getPlayerName()
+            let player2Name = playerManager.player2.getPlayerName()
             if (gameState === '' ) {
                 if (isPlayer1Turn === true) {
-                    instructionText.textContent = "It's Player 1's turn! Select an empty box on the grid!"
+                    instructionText.textContent = "It's " + player1Name + "'s turn! Select an empty box on the grid!"
                 } else if (isPlayer1Turn === false) {
-                    instructionText.textContent = "It's Player 2's turn! Select an empty box on the grid!"
+                    instructionText.textContent = "It's " + player2Name + "'s turn! Select an empty box on the grid!"
                 }
                 if (canPlace === false) {
                     instructionText.textContent = "This box is already occupied! Please select a different one."
                 }
             } else if (gameState !== '') {
                 if (gameState === 'player1Win') {
-                    instructionText.textContent = "Player 1 wins! Refresh the page to play again..."
+                    instructionText.textContent = player1Name + " wins! Refresh the page to play again..."
                 } else if (gameState === 'player2Win') {
-                    instructionText.textContent = "Player 2 wins! Refresh the page to play again..."
+                    instructionText.textContent = player2Name + " wins! Refresh the page to play again..."
                 } else if (gameState === 'tie') {
                     instructionText.textContent = "It's a tie! Refresh the page to play again..."
                 }
