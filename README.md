@@ -24,3 +24,7 @@ Live demo link: https://j0e-quan.github.io/tic-tac-toe/
 ![Picture showing several rounds being played](./readme-assets/gameplay-2.jpeg)
 ![Picture showing a round ending in a tie](./readme-assets/gameplay-tie.jpeg)
 ![Picture showing layout of the page on mobile](./readme-assets/mobile.jpeg)
+
+## Getting started:
+1. clone this repo in your desired folder: `git clone https://github.com/J0e-Quan/tic-tac-toe.git`
+2. open index.html in your browser to run the code
